@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Конструктор Пазлов Онлайн</title>
+	<meta name="description" content="Бесплатные пазлы онлайн. Выберите пазл из галереи или создайте свой собственный пазл при помощи конструтора пазлов онлайн.">
+    <!--[if lt IE 9]><script type="text/javascript" src="js/bin/flashcanvas.js"></script><![endif]-->
+
+    <link rel="stylesheet" href="http://pazlyonline.com/jps/css/modal.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="http://pazlyonline.com/jps/css/style.css" type="text/css" charset="utf-8" />
+    <link rel="stylesheet" href="http://pazlyonline.com/jps/css/buttons.css" type="text/css" charset="utf-8" />
+    <link rel="shortcut icon" type="image/x-icon" href="http://pazlyonline.com/img/favicon.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="image_src"  href="http://pazlyonline.com/images/konstruktor.jpg" />
+
+</head>
+<body>
+
+<!-- JIGSAW CANVAS -->
+<div id="canvas-wrap">
+    <canvas id="canvas"></canvas>
+    <canvas class="hide" id="image"></canvas>
+    <canvas class="hide" id="image-preview"></canvas>
+</div>
+
+<!-- GAME OPTIONS -->
+<div id="game-options">
+<ul>
+    <li><b id="clock" class="button">00:00:00</b></li>
+    <li><a id="SHOW_EDGE" class="button left" title="Боковые">Боковые</a></li>
+    <li><a id="SHOW_MIDDLE" class="button middle" title="Средние">Средние</a></li>
+    <li><a id="SHOW_ALL" class="button right" title="Все">Все</a></li>
+    <li><a id="JIGSAW_SHUFFLE" class="button left" title="Перетасовать">Перетасовать</a></li>
+    <li><a id="SHOW_PREVIEW" class="button middle" title="Просмотреть">Просмотреть</a></li>
+    <li><a id="SHOW_HELP" class="button help right" title="Помощь">Помощь</a></li>
+    <!-- INSERT CUSTOM BUTTONS -->
+
+    <!-- END INSERT CUSTOM BUTTONS -->
+    <li>
+        <div class="styled-select">
+            <select id="set-parts" selected-index="8">
+            </select>
+        </div>
+    </li>
+    <!-- Insert custom buttons here -->
+    <li id="create"><a class="button add" id="SHOW_FILEPICKER" title="Создать Пазл" >Создать Пазл</a></li>
+</ul>
+<br class="clear"/>
+</div>
+
+<!-- MODAL WINDOW -->
+<div class="hide" id="overlay"></div>
+<div id="modal-window" class="hide">
+    <div id="modal-window-msg"></div>
+    <a id="modal-window-close" class="button">Закрыть</a>
+</div>
+
+<!-- CONGRATULATION -->
+<div id="congrat" class="hide">
+    <h1>Поздравляем!</h1>
+    <h2>Ваше время:</h2>
+    <h3><span id="time"></span></h3>
+    <form method="post" class="hide" action="" target="save-score" onsubmit="jigsaw.UI.close_lightbox();">
+        <label>
+        Your Name: <input type="text" name="name" />
+        </label>
+        <input type="submit" value="Save score" />
+        <input type="hidden" id="time-input" name="time"/>
+    </form>
+</div>
+
+<!-- CREATE PUZZLE -->
+<div class="hide" id="create-puzzle">
+    <h1>Выберите изображение</h1>
+    <form id="image-form" id="add-image-form">
+        <input type="file" id="image-input">
+        <p id="image-error">это не изображение</p>
+        <p id="dnd"><i>Или вставьте ссылку</i></p>
+		<p><i>Пример: http://pazlyonline.com/konstruktor.html?image=ссылка_на_картинку</i></p>
+    </form>
+</div>
+
+<!-- HELP -->
+<div id="help" class="hide">
+    <h2>Как играть</h2>
+    <ul>
+        <li>Измените количество штук с помощью селектора вверху.<br/>
+            <img src="http://pazlyonline.com/jps/images/selector.png"/>
+        </li>
+
+        <!-- <li>Use left/right arrows, or right click to rotate a piece.</li> -->
+
+        <li>Переключение между краем или средними частями:<br>
+            <img src="http://pazlyonline.com/jps/images/toggle.png"/>
+        </li>
+    </ul>
+
+    <h3>Удачи.</h3>
+</div>
+
+<form class="hide" method="post" id="redirect-form">
+    <input type="text" name="time" id="t" />
+    <input type="text" name="parts" id="p" />
+</form>
+<iframe class="hide" src="about:blank" id="save-score" name="save-score"></iframe>
+<!-- SCRIPTS ROMPECABEZAS -->
+<script src="http://pazlyonline.com/jps/js/event-emiter.min.js"></script>
+<script src="http://pazlyonline.com/jps/js/canvas-event.min.js"></script>
+<script src="http://pazlyonline.com/jps/js/canvas-puzzle.min.js"></script>
+<!--[if lt IE 9]><script type="text/javascript" src="js/canvas-puzzle.ie.min.js"></script><![endif]-->
+<script>
+;(function() {
+var jsaw = new jigsaw.Jigsaw({
+        defaultImage: "http://pazlyonline.com/images/konstruktor.jpg",
+        piecesNumberTmpl: "%d Pieces",
+		rotatePieces: false,
+        shuffled: true,
+	    spread: .75,
+        defaultPieces: 48,
+        offsetTop: 0
+    });
+
+	jsaw.eventBus.on(jigsaw.Events.JIGSAW_COMPLETE, function() {
+
+playSound('wingame');
+});
+
+    if (jigsaw.GET["image"]) { jsaw.set_image(jigsaw.GET["image"]); }
+}());
+var partsindex = 2;
+</script>
+</body></html>
